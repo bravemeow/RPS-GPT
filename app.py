@@ -14,7 +14,6 @@ def hello_world():
 @app.post("/data")
 def sendData():
     if request.method == 'POST':
-        print(request.form['move'])
         user_move = request.form['move']
         user_json = f'{{"move": "{user_move}"}}'
         user_data = {"role": "user", "content": user_json}

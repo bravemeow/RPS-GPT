@@ -12,5 +12,4 @@ def sendMessage(conversation):
         messages=conversation
     )
     res_text = res.choices[0].message.content
-    print(res)
     return res_text
