@@ -1,17 +1,18 @@
-from flask import Flask, render_template, request
+from flask import Flask,  request
 from openai import sendMessage
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 conversation = [
     {"role": "system", "content": "Rock Paper Scissors Game God."},
     {"role": "user", "content": "Let's play Rock Paper Scissors game! Please response only the JSON format without any extra text."}
 ]
-@app.route("/")
-def hello_world():
-    return render_template('index.html')
 
-@app.post("/data")
+@app.route("/data", methods = ['POST', 'GET'])
 def sendData():
     if request.method == 'POST':
         user_move = request.form['move']
@@ -22,7 +23,6 @@ def sendData():
         system_data = {"role": "assistant", "content": res_text}
         conversation.append(system_data)
         print(conversation)
-        return render_template('index.html', res_text=res_text)
-    
-
-app.run(host='localhost', port=5000, debug=True)
+        return res_text
+    else:
+        return {"body": "Send message!"}
