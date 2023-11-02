@@ -1,28 +1,20 @@
-from flask import Flask,  request
-from openai import sendMessage
+from flask import Flask, request, json
 from flask_cors import CORS, cross_origin
+from gpt import sendMessage
 
 app = Flask(__name__)
-cors = CORS(app)
+cors = CORS(app, origins="http://localhost:5173")
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 
-conversation = [
-    {"role": "system", "content": "Rock Paper Scissors Game God."},
-    {"role": "user", "content": "Let's play Rock Paper Scissors game! Please response only the JSON format without any extra text."}
-]
-
-@app.route("/data", methods = ['POST', 'GET'])
+@app.route("/api/move", methods=['POST', 'GET'])
 def sendData():
     if request.method == 'POST':
-        user_move = request.form['move']
-        user_json = f'{{"move": "{user_move}"}}'
-        user_data = {"role": "user", "content": user_json}
-        conversation.append(user_data)
-        res_text = sendMessage(conversation)
-        system_data = {"role": "assistant", "content": res_text}
-        conversation.append(system_data)
-        print(conversation)
+        data = json.loads(request.get_data())
+        user_conversation = data['conversation']
+        res_text = sendMessage(user_conversation)
+        print(res_text)
         return res_text
     else:
-        return {"body": "Send message!"}
+        return json.dumps({"error": "Hi"})
+
