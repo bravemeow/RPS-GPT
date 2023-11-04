@@ -16,5 +16,5 @@ def sendData():
         print(res_text)
         return res_text
     else:
-        return json.dumps({"error": "Hi"})
+        return json.dumps({"error": "error"})
 
